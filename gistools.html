@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="bootstrap.min.css">
+<script src="angular.min.js"></script>
+<script src="bigint.js"></script>
+</head>
+<body>
+	<div class="container-fluid" ng-app="TransformApp"
+		ng-controller="TransformCtrl">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="page-header">
+					<h1>Location Transform Tools</h1>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-4 column">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title">WGS84(Latitude & Longtitude):
+									Degree <==> Integer</h3>
+							</div>
+							<div class="panel-body">
+								<div class="panel">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<h2>Example:</h2>
+											<p>31.230288, 121.481672 <==> 0x‭16354CE9‬, ‭0x56631041‬
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="panel">
+									<div class="row clearfix">
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Latitude(Degree)</label><input type="text"
+													class="form-control" ng-model="latDeg" />
+											</div>
+										</div>
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Longtitude(Degree)</label><input type="text"
+													class="form-control" ng-model="lonDeg" />
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<button type="button" class="btn btn-primary btn-block"
+												ng-click="degree2Integer()">Degree To Integer</button>
+										</div>
+									</div>
+								</div>
+								<div class="panel">
+									<div class="row clearfix">
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Latitude(DEC Integer)</label><input type="text"
+													class="form-control" ng-model="latDec" />
+											</div>
+										</div>
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Longtitude(DEC Integer)</label><input type="text"
+													class="form-control" ng-model="lonDec" />
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Latitude(HEX Integer)</label><input type="text"
+													class="form-control" ng-model="latHex" readonly="readonly" />
+											</div>
+										</div>
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Longtitude(HEX Integer)</label><input type="text"
+													class="form-control" ng-model="lonHex" readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<button type="button" class="btn btn-success btn-block"
+												ng-click="integer2Degree()">Integer To Degree</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 column">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title">Morton Code <==> WGS84(Latitude &
+									Longtitude)</h3>
+							</div>
+							<div class="panel-body">
+								<div class="panel">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<h2>Example:</h2>
+											<p>579221254078012839 <==> 582901293, 27374451</p>
+										</div>
+									</div>
+								</div>
+								<div class="panel">
+									<div class="row clearfix">
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Morton Code(DEC)</label><input type="text"
+													class="form-control" ng-model="mortonCodeDec" />
+											</div>
+										</div>
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Morton Code(HEX)</label><input type="text"
+													class="form-control" ng-model="mortonCodeHex"
+													readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<button type="button" class="btn btn-primary btn-block"
+												ng-click="mortonCode2LatLon()">Morton Code To
+												Latitude & Longtitude</button>
+										</div>
+									</div>
+								</div>
+								<div class="panel">
+									<div class="row clearfix">
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Latitude(DEC Integer)</label><input type="text"
+													class="form-control" ng-model="mortonLatDec" />
+											</div>
+										</div>
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Longtitude(DEC Integer)</label><input type="text"
+													class="form-control" ng-model="mortonLonDec" />
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Latitude(HEX Integer)</label><input type="text"
+													class="form-control" ng-model="mortonLatHex"
+													readonly="readonly" />
+											</div>
+										</div>
+										<div class="col-md-6 column">
+											<div class="form-group">
+												<label>Longtitude(HEX Integer)</label><input type="text"
+													class="form-control" ng-model="mortonLonHex"
+													readonly="readonly" />
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<button type="button" class="btn btn-success btn-block"
+												ng-click="latLon2MortonCode()">Latitude &
+												Longtitude To Morton Code</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-4 column">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<h3 class="panel-title">WGS84(Latitude & Longtitude) <==>
+										Mercator</h3>
+								</div>
+								<div class="panel-body">
+									<div class="panel">
+										<div class="row clearfix">
+											<div class="col-md-12 column">
+												<h2>Example:</h2>
+												<p>31.230288, 121.481672 <==> 3662692.675870,
+													13523277.865873</p>
+											</div>
+										</div>
+									</div>
+									<div class="panel">
+										<div class="row clearfix">
+											<div class="col-md-6 column">
+												<div class="form-group">
+													<label>Latitude(Degree)</label><input type="text"
+														class="form-control" ng-model="mercatorLatDeg" />
+												</div>
+											</div>
+											<div class="col-md-6 column">
+												<div class="form-group">
+													<label>Longtitude(Degree)</label><input type="text"
+														class="form-control" ng-model="mercatorLonDeg" />
+												</div>
+											</div>
+										</div>
+										<div class="row clearfix">
+											<div class="col-md-12 column">
+												<button type="button" class="btn btn-primary btn-block"
+													ng-click="latLon2Mercator()">Latitude & Longtitude
+													To Mercator</button>
+											</div>
+										</div>
+									</div>
+									<div class="panel">
+										<div class="row clearfix">
+											<div class="col-md-6 column">
+												<div class="form-group">
+													<label>Latitude(Mercator)</label><input type="text"
+														class="form-control" ng-model="mercatorLat" />
+												</div>
+											</div>
+											<div class="col-md-6 column">
+												<div class="form-group">
+													<label>Longtitude(Mercator)</label><input type="text"
+														class="form-control" ng-model="mercatorLon" />
+												</div>
+											</div>
+										</div>
+										<div class="row clearfix">
+											<div class="col-md-12 column">
+												<button type="button" class="btn btn-success btn-block"
+													ng-click="mercator2LatLon()">Mercator To Latitude
+													& Longtitude</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var transformApp = angular.module("TransformApp", []);
+
+			transformApp.service('transform', function() {
+				this.degree2Integer = function (x) {
+					var y = (x / 180.0) * Math.pow(2, 31);
+					y %= Math.pow(2, 32);
+					if (y < 0) {
+						y += Math.pow(2, 32);
+					}
+					if (y > 2147483647 + 0.5) {
+						y -= Math.pow(2, 32) + 0.5;
+					} else {
+						y += 0.5;
+					}
+					if (y >= 0)
+						return Math.floor(y);
+					else
+						return Math.ceil(y);
+				};
+
+				this.integer2Degree = function (x, n) {
+					return x * 90.0 * (n + 1) / Math.pow(2, 30+n);
+				};
+
+				this.mortonCode2Coordinate = function (x) {
+					var s = bigInt2str(str2bigInt(x,10),2);
+					if (s.length < 63){
+						var offset = 63 - s.length;
+						for (var i=0;i<offset;++i){
+							s = '0' + s;
+						}
+					}
+					var latitude = '';
+					var longitude = '';
+					for (var i=0;i<s.length;++i){
+						if(i%2==0){
+							longitude += s[i];
+						}else{
+							latitude += s[i];
+						}
+					}
+					return {"latitude":parseInt(latitude,2),"longitude":parseInt(longitude,2)};
+				};
+
+				this.coordinate2MortonCode = function (lat, lon) {
+					var latitude = parseInt(lat).toString(2);
+					if (latitude.length < 31){
+						var offset = 31 - latitude.length;
+						for (var i=0;i<offset;++i){
+							latitude = '0' + latitude;
+						}
+					}
+					var longtitude = parseInt(lon).toString(2);
+					if (longtitude.length < 32){
+						var offset = 32 - longtitude.length;
+						for (var i=0;i<offset;++i){
+							longtitude = '0' + longtitude;
+						}
+					}
+					var s = longtitude[0];
+					for (var i=0;i<31;++i){
+						s += latitude[i];
+						s += longtitude[i+1];
+					}
+					return bigInt2str(str2bigInt(s,2),10);
+				};
+
+				this.latLon2Mercator = function (lat, lon) {
+					var M_PI = 3.14159265358979323846;
+					var longitude = parseFloat(lon) * 20037508.34 / 180;
+					var latitude = Math.log(Math.tan((90 + parseFloat(lat)) * M_PI / 360)) / (M_PI / 180);
+					latitude = latitude * 20037508.34 / 180;
+					return {"latitude":latitude,"longitude":longitude};
+				};
+
+				this.mercator2LatLon = function (lat, lon) {
+					var M_PI = 3.14159265358979323846;
+					var longitude = parseFloat(lon) / 20037508.34 * 180;
+					var latitude = parseFloat(lat) / 20037508.34 * 180;
+					latitude = 180.0 / M_PI * (2 * Math.atan(Math.exp(latitude * M_PI / 180)) - M_PI / 2);
+					return {"latitude":latitude,"longitude":longitude};
+				};
+			});
+
+			transformApp.controller("TransformCtrl", function($scope, transform){
+				$scope.degree2Integer = function(){
+					$scope.latDec = transform.degree2Integer($scope.latDeg);
+					$scope.latHex = "0x" + $scope.latDec.toString(16);
+					$scope.lonDec = transform.degree2Integer($scope.lonDeg);
+					$scope.lonHex = "0x" + $scope.lonDec.toString(16);
+				};
+
+				$scope.integer2Degree = function(){
+					$scope.latDeg = transform.integer2Degree($scope.latDec, 0);
+					$scope.latHex = "0x" + parseInt($scope.latDec).toString(16);
+					$scope.lonDeg = transform.integer2Degree($scope.lonDec, 1);
+					$scope.lonHex = "0x" + parseInt($scope.lonDec).toString(16);
+				};
+
+				$scope.mortonCode2LatLon = function(){
+					$scope.mortonCodeHex = "0x" + bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					var coordinate = transform.mortonCode2Coordinate($scope.mortonCodeDec);
+					$scope.mortonLatDec = coordinate.latitude;
+					$scope.mortonLonDec = coordinate.longitude;
+					$scope.mortonLatHex = "0x" + coordinate.latitude.toString(16);
+					$scope.mortonLonHex = "0x" + coordinate.longitude.toString(16);
+				};
+
+				$scope.latLon2MortonCode = function(){
+					$scope.mortonCodeDec = transform.coordinate2MortonCode($scope.mortonLatDec, $scope.mortonLonDec);
+					$scope.mortonCodeHex = "0x" + bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					$scope.mortonLatHex = "0x" + parseInt($scope.mortonLatDec).toString(16)
+					$scope.mortonLonHex = "0x" + parseInt($scope.mortonLonDec).toString(16);
+				};
+
+				$scope.latLon2Mercator = function () {
+					var mercator = transform.latLon2Mercator($scope.mercatorLatDeg, $scope.mercatorLonDeg);
+					$scope.mercatorLat = mercator.latitude.toString();
+					$scope.mercatorLon = mercator.longitude.toString();
+				};
+
+				$scope.mercator2LatLon = function () {
+					var coordinate = transform.mercator2LatLon($scope.mercatorLat, $scope.mercatorLon);
+					$scope.mercatorLatDeg = coordinate.latitude.toString();
+					$scope.mercatorLonDeg = coordinate.longitude.toString();
+				};
+			});
+		</script>
+</body>
+</html>
+
+<!-- tS64 getLongitude(tU64 u64MortonCode) {
+	tU64 longitude = 0;
+	tU8 u8Shift = 0;
+	for (; u8Shift < 32; ++u8Shift) {
+		longitude = longitude | ((u64MortonCode & ((tU64) 1 << (u8Shift * 2))) ? 1 << u8Shift : 0);
+	}
+	return (tS64) longitude;
+}
+tS64 getLatitude(tU64 u64MortonCode) {
+	tU64 latitude = 0;
+	tU8 u8Shift = 0;
+	for (; u8Shift < 32; ++u8Shift) {
+		latitude = latitude | ((u64MortonCode & ((tU64) 2 << (u8Shift * 2))) ? 1 << u8Shift : 0);
+	}
+	if (latitude & 0x4000000000000000ULL)
+		latitude |= 0x8000000000000000ULL;
+	return (tS64) latitude;
+} -->
