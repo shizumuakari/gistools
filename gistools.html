@@ -32,6 +32,10 @@
 									</div>
 								</div>
 								<div class="panel">
+									<input type="checkbox" ng-model="wgsDecSwitch" ng-hide="true" />
+									<input type="checkbox" ng-model="wgsHexSwitch" ng-click="wgsSwitch()"/> Use HEX
+								</div>
+								<div class="panel">
 									<div class="row clearfix">
 										<div class="col-md-6 column">
 											<div class="form-group">
@@ -58,27 +62,33 @@
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Latitude(DEC Integer)</label><input type="text"
-													class="form-control" ng-model="wgsLatDec" />
+													class="form-control" ng-model="wgsLatDec" ng-readonly="wgsHexSwitch" />
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Longtitude(DEC Integer)</label><input type="text"
-													class="form-control" ng-model="wgsLonDec" />
+													class="form-control" ng-model="wgsLonDec" ng-readonly="wgsHexSwitch" />
 											</div>
 										</div>
 									</div>
 									<div class="row clearfix">
 										<div class="col-md-6 column">
 											<div class="form-group">
-												<label>Latitude(HEX Integer)</label><input type="text"
-													class="form-control" ng-model="wgsLatHex" readonly="readonly" />
+												<label>Latitude(HEX Integer)</label>
+												<div class="input-group">
+													<span class="input-group-addon">0x</span>
+													<input type="text" class="form-control" ng-model="wgsLatHex" ng-readonly="wgsDecSwitch" />
+												</div>
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
-												<label>Longtitude(HEX Integer)</label><input type="text"
-													class="form-control" ng-model="wgsLonHex" readonly="readonly" />
+												<label>Longtitude(HEX Integer)</label>
+												<div class="input-group">
+													<span class="input-group-addon">0x</span>
+													<input type="text" class="form-control" ng-model="wgsLonHex" ng-readonly="wgsDecSwitch" />
+												</div>
 											</div>
 										</div>
 									</div>
@@ -108,18 +118,25 @@
 									</div>
 								</div>
 								<div class="panel">
+									<input type="checkbox" ng-model="mortonDecSwitch" ng-hide="true" />
+									<input type="checkbox" ng-model="mortonHexSwitch" ng-click="mortonSwitch()"/> Use HEX
+								</div>
+								<div class="panel">
 									<div class="row clearfix">
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Morton Code(DEC)</label><input type="text"
-													class="form-control" ng-model="mortonCodeDec" />
+													class="form-control" ng-model="mortonCodeDec"
+													ng-readonly="mortonHexSwitch" />
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
-												<label>Morton Code(HEX)</label><input type="text"
-													class="form-control" ng-model="mortonCodeHex"
-													readonly="readonly" />
+												<label>Morton Code(HEX)</label>
+												<div class="input-group">
+													<span class="input-group-addon">0x</span>
+													<input type="text" class="form-control" ng-model="mortonCodeHex" ng-readonly="mortonDecSwitch" />
+												</div>
 											</div>
 										</div>
 									</div>
@@ -136,29 +153,35 @@
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Latitude(DEC Integer)</label><input type="text"
-													class="form-control" ng-model="mortonLatDec" />
+													class="form-control" ng-model="mortonLatDec" 
+													ng-readonly="mortonHexSwitch" />
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Longtitude(DEC Integer)</label><input type="text"
-													class="form-control" ng-model="mortonLonDec" />
+													class="form-control" ng-model="mortonLonDec" 
+													ng-readonly="mortonHexSwitch" />
 											</div>
 										</div>
 									</div>
 									<div class="row clearfix">
 										<div class="col-md-6 column">
 											<div class="form-group">
-												<label>Latitude(HEX Integer)</label><input type="text"
-													class="form-control" ng-model="mortonLatHex"
-													readonly="readonly" />
+												<label>Latitude(HEX Integer)</label>
+												<div class="input-group">
+													<span class="input-group-addon">0x</span>
+													<input type="text" class="form-control" ng-model="mortonLatHex" ng-readonly="mortonDecSwitch" />
+												</div>
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
-												<label>Longtitude(HEX Integer)</label><input type="text"
-													class="form-control" ng-model="mortonLonHex"
-													readonly="readonly" />
+												<label>Longtitude(HEX Integer)</label>
+												<div class="input-group">
+													<span class="input-group-addon">0x</span>
+													<input type="text" class="form-control" ng-model="mortonLonHex" ng-readonly="mortonDecSwitch" />
+												</div>
 											</div>
 										</div>
 									</div>
@@ -330,6 +353,17 @@
 			});
 
 			transformApp.controller("TransformCtrl", function($scope, transform){
+				$scope.wgsDecSwitch = true;
+				$scope.wgsHexSwitch = false;
+
+				$scope.wgsSwitch = function(){
+					if ($scope.wgsHexSwitch){
+						$scope.wgsDecSwitch = false;
+					} else {
+						$scope.wgsDecSwitch = true;
+					}
+				};
+
 				$scope.degree2Integer = function(){
 					$scope.wgsLatDec = transform.degree2Integer($scope.wgsLatDeg);
 					$scope.wgsLonDec = transform.degree2Integer($scope.wgsLonDeg);
@@ -338,14 +372,34 @@
 				};
 
 				$scope.integer2Degree = function(){
+					if ($scope.wgsHexSwitch){
+						$scope.wgsLatDec = parseInt($scope.wgsLatHex, 16).toString(10);
+						$scope.wgsLonDec = parseInt($scope.wgsLonHex, 16).toString(10);
+					} else {
+						$scope.wgsLatHex = parseInt($scope.wgsLatDec).toString(16);
+						$scope.wgsLonHex = parseInt($scope.wgsLonDec).toString(16);
+					}
 					$scope.wgsLatDeg = transform.integer2Degree($scope.wgsLatDec, 0);
 					$scope.wgsLonDeg = transform.integer2Degree($scope.wgsLonDec, 1);
-					$scope.wgsLatHex = parseInt($scope.wgsLatDec).toString(16);
-					$scope.wgsLonHex = parseInt($scope.wgsLonDec).toString(16);
+				};
+
+				$scope.mortonDecSwitch = true;
+				$scope.mortonHexSwitch = false;
+
+				$scope.mortonSwitch = function(){
+					if ($scope.mortonHexSwitch){
+						$scope.mortonDecSwitch = false;
+					} else {
+						$scope.mortonDecSwitch = true;
+					}
 				};
 
 				$scope.mortonCode2LatLon = function(){
-					$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					if ($scope.mortonHexSwitch){
+						$scope.mortonCodeDec = bigInt2str(str2bigInt($scope.mortonCodeHex,16),10);;
+					} else {
+						$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					}
 					var coordinate = transform.mortonCode2LatLon($scope.mortonCodeDec);
 					$scope.mortonLatDec = coordinate.latitude;
 					$scope.mortonLonDec = coordinate.longitude;
@@ -354,10 +408,15 @@
 				};
 
 				$scope.latLon2MortonCode = function(){
+					if ($scope.mortonHexSwitch){
+						$scope.mortonLatDec = parseInt($scope.mortonLatHex, 16).toString(10)
+						$scope.mortonLonDec = parseInt($scope.mortonLonHex, 16).toString(10);
+					} else {
+						$scope.mortonLatHex = parseInt($scope.mortonLatDec).toString(16)
+						$scope.mortonLonHex = parseInt($scope.mortonLonDec).toString(16);
+					}
 					$scope.mortonCodeDec = transform.latLon2MortonCode($scope.mortonLatDec, $scope.mortonLonDec);
 					$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
-					$scope.mortonLatHex = parseInt($scope.mortonLatDec).toString(16)
-					$scope.mortonLonHex = parseInt($scope.mortonLonDec).toString(16);
 				};
 
 				$scope.latLon2Mercator = function () {
