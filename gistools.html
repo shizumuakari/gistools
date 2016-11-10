@@ -36,13 +36,13 @@
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Latitude(Degree)</label><input type="text"
-													class="form-control" ng-model="latDeg" />
+													class="form-control" ng-model="wgsLatDeg" />
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Longtitude(Degree)</label><input type="text"
-													class="form-control" ng-model="lonDeg" />
+													class="form-control" ng-model="wgsLonDeg" />
 											</div>
 										</div>
 									</div>
@@ -58,13 +58,13 @@
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Latitude(DEC Integer)</label><input type="text"
-													class="form-control" ng-model="latDec" />
+													class="form-control" ng-model="wgsLatDec" />
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Longtitude(DEC Integer)</label><input type="text"
-													class="form-control" ng-model="lonDec" />
+													class="form-control" ng-model="wgsLonDec" />
 											</div>
 										</div>
 									</div>
@@ -72,13 +72,13 @@
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Latitude(HEX Integer)</label><input type="text"
-													class="form-control" ng-model="latHex" readonly="readonly" />
+													class="form-control" ng-model="wgsLatHex" readonly="readonly" />
 											</div>
 										</div>
 										<div class="col-md-6 column">
 											<div class="form-group">
 												<label>Longtitude(HEX Integer)</label><input type="text"
-													class="form-control" ng-model="lonHex" readonly="readonly" />
+													class="form-control" ng-model="wgsLonHex" readonly="readonly" />
 											</div>
 										</div>
 									</div>
@@ -218,13 +218,13 @@
 											<div class="col-md-6 column">
 												<div class="form-group">
 													<label>Latitude(Mercator)</label><input type="text"
-														class="form-control" ng-model="mercatorLat" />
+														class="form-control" ng-model="mercatorLatDec" />
 												</div>
 											</div>
 											<div class="col-md-6 column">
 												<div class="form-group">
 													<label>Longtitude(Mercator)</label><input type="text"
-														class="form-control" ng-model="mercatorLon" />
+														class="form-control" ng-model="mercatorLonDec" />
 												</div>
 											</div>
 										</div>
@@ -269,7 +269,7 @@
 					return x * 90.0 * (n + 1) / Math.pow(2, 30+n);
 				};
 
-				this.mortonCode2Coordinate = function (x) {
+				this.mortonCode2LatLon = function (x) {
 					var s = bigInt2str(str2bigInt(x,10),2);
 					if (s.length < 63){
 						var offset = 63 - s.length;
@@ -289,7 +289,7 @@
 					return {"latitude":parseInt(latitude,2),"longitude":parseInt(longitude,2)};
 				};
 
-				this.coordinate2MortonCode = function (lat, lon) {
+				this.latLon2MortonCode = function (lat, lon) {
 					var latitude = parseInt(lat).toString(2);
 					if (latitude.length < 31){
 						var offset = 31 - latitude.length;
@@ -331,43 +331,43 @@
 
 			transformApp.controller("TransformCtrl", function($scope, transform){
 				$scope.degree2Integer = function(){
-					$scope.latDec = transform.degree2Integer($scope.latDeg);
-					$scope.latHex = "0x" + $scope.latDec.toString(16);
-					$scope.lonDec = transform.degree2Integer($scope.lonDeg);
-					$scope.lonHex = "0x" + $scope.lonDec.toString(16);
+					$scope.wgsLatDec = transform.degree2Integer($scope.wgsLatDeg);
+					$scope.wgsLonDec = transform.degree2Integer($scope.wgsLonDeg);
+					$scope.wgsLatHex = $scope.wgsLatDec.toString(16);
+					$scope.wgsLonHex = $scope.wgsLonDec.toString(16);
 				};
 
 				$scope.integer2Degree = function(){
-					$scope.latDeg = transform.integer2Degree($scope.latDec, 0);
-					$scope.latHex = "0x" + parseInt($scope.latDec).toString(16);
-					$scope.lonDeg = transform.integer2Degree($scope.lonDec, 1);
-					$scope.lonHex = "0x" + parseInt($scope.lonDec).toString(16);
+					$scope.wgsLatDeg = transform.integer2Degree($scope.wgsLatDec, 0);
+					$scope.wgsLonDeg = transform.integer2Degree($scope.wgsLonDec, 1);
+					$scope.wgsLatHex = parseInt($scope.wgsLatDec).toString(16);
+					$scope.wgsLonHex = parseInt($scope.wgsLonDec).toString(16);
 				};
 
 				$scope.mortonCode2LatLon = function(){
-					$scope.mortonCodeHex = "0x" + bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
-					var coordinate = transform.mortonCode2Coordinate($scope.mortonCodeDec);
+					$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					var coordinate = transform.mortonCode2LatLon($scope.mortonCodeDec);
 					$scope.mortonLatDec = coordinate.latitude;
 					$scope.mortonLonDec = coordinate.longitude;
-					$scope.mortonLatHex = "0x" + coordinate.latitude.toString(16);
-					$scope.mortonLonHex = "0x" + coordinate.longitude.toString(16);
+					$scope.mortonLatHex = coordinate.latitude.toString(16);
+					$scope.mortonLonHex = coordinate.longitude.toString(16);
 				};
 
 				$scope.latLon2MortonCode = function(){
-					$scope.mortonCodeDec = transform.coordinate2MortonCode($scope.mortonLatDec, $scope.mortonLonDec);
-					$scope.mortonCodeHex = "0x" + bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
-					$scope.mortonLatHex = "0x" + parseInt($scope.mortonLatDec).toString(16)
-					$scope.mortonLonHex = "0x" + parseInt($scope.mortonLonDec).toString(16);
+					$scope.mortonCodeDec = transform.latLon2MortonCode($scope.mortonLatDec, $scope.mortonLonDec);
+					$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					$scope.mortonLatHex = parseInt($scope.mortonLatDec).toString(16)
+					$scope.mortonLonHex = parseInt($scope.mortonLonDec).toString(16);
 				};
 
 				$scope.latLon2Mercator = function () {
 					var mercator = transform.latLon2Mercator($scope.mercatorLatDeg, $scope.mercatorLonDeg);
-					$scope.mercatorLat = mercator.latitude.toString();
-					$scope.mercatorLon = mercator.longitude.toString();
+					$scope.mercatorLatDec = mercator.latitude.toString();
+					$scope.mercatorLonDec = mercator.longitude.toString();
 				};
 
 				$scope.mercator2LatLon = function () {
-					var coordinate = transform.mercator2LatLon($scope.mercatorLat, $scope.mercatorLon);
+					var coordinate = transform.mercator2LatLon($scope.mercatorLatDec, $scope.mercatorLonDec);
 					$scope.mercatorLatDeg = coordinate.latitude.toString();
 					$scope.mercatorLonDeg = coordinate.longitude.toString();
 				};
