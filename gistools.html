@@ -396,9 +396,9 @@
 
 				$scope.mortonCode2LatLon = function(){
 					if ($scope.mortonHexSwitch){
-						$scope.mortonCodeDec = bigInt2str(str2bigInt($scope.mortonCodeHex,16),10);;
+						$scope.mortonCodeDec = bigInt2str(str2bigInt($scope.mortonCodeHex,16),10);
 					} else {
-						$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+						$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);
 					}
 					var coordinate = transform.mortonCode2LatLon($scope.mortonCodeDec);
 					$scope.mortonLatDec = coordinate.latitude;
@@ -409,14 +409,14 @@
 
 				$scope.latLon2MortonCode = function(){
 					if ($scope.mortonHexSwitch){
-						$scope.mortonLatDec = parseInt($scope.mortonLatHex, 16).toString(10)
+						$scope.mortonLatDec = parseInt($scope.mortonLatHex, 16).toString(10);
 						$scope.mortonLonDec = parseInt($scope.mortonLonHex, 16).toString(10);
 					} else {
-						$scope.mortonLatHex = parseInt($scope.mortonLatDec).toString(16)
+						$scope.mortonLatHex = parseInt($scope.mortonLatDec).toString(16);
 						$scope.mortonLonHex = parseInt($scope.mortonLonDec).toString(16);
 					}
 					$scope.mortonCodeDec = transform.latLon2MortonCode($scope.mortonLatDec, $scope.mortonLonDec);
-					$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);;
+					$scope.mortonCodeHex = bigInt2str(str2bigInt($scope.mortonCodeDec,10),16);
 				};
 
 				$scope.latLon2Mercator = function () {
