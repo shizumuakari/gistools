@@ -11,8 +11,13 @@
 		ng-controller="TransformCtrl">
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<div class="page-header">
-					<h1>Location Transform Tools</h1>
+				<div class="row clearfix">
+					<div class="col-md-4 column">
+						<h1>Location Transform Tools</h1>
+					</div>
+					<div class="col-md-1 column">
+						<button type="button" class="btn btn-warning btn-block" ng-click="exchangeHexSign()">HEX-SIGN</button>
+					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-4 column">
@@ -350,6 +355,19 @@
 					latitude = 180.0 / M_PI * (2 * Math.atan(Math.exp(latitude * M_PI / 180)) - M_PI / 2);
 					return {"latitude":latitude,"longitude":longitude};
 				};
+
+				this.exchangeHexSign = function (x) {
+					y = parseInt(x, 16)
+					if (isNaN(y)) {
+						return 0;
+					} else {
+						if(y < 0){
+							return y + 0x80000000;
+						} else {
+							return y;
+						}
+					}
+				};
 			});
 
 			transformApp.controller("TransformCtrl", function($scope, transform){
@@ -429,6 +447,13 @@
 					var coordinate = transform.mercator2LatLon($scope.mercatorLatDec, $scope.mercatorLonDec);
 					$scope.mercatorLatDeg = coordinate.latitude.toString();
 					$scope.mercatorLonDeg = coordinate.longitude.toString();
+				};
+
+				$scope.exchangeHexSign = function () {
+					$scope.wgsLatHex = transform.exchangeHexSign($scope.wgsLatHex).toString(16);
+					$scope.wgsLonHex = transform.exchangeHexSign($scope.wgsLonHex).toString(16);
+					$scope.mortonLatHex = transform.exchangeHexSign($scope.mortonLatHex).toString(16);
+					$scope.mortonLonHex = transform.exchangeHexSign($scope.mortonLonHex).toString(16);
 				};
 			});
 		</script>
